@@ -1,14 +1,14 @@
+// app/leave-tracking/page.js (second site)
 "use client";
 import DashboardLayout from "../components/DashboardLayout";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import LeaveTable from "../components/LeaveTable";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LeavePage() {
-  const [search, setSearch] = useState("");
+function LeaveTrackingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const [search, setSearch] = useState("");
   const [requests, setRequests] = useState([
     {
       id: "003546AE",
@@ -84,7 +84,6 @@ export default function LeavePage() {
     },
   ]);
 
-  // Handle incoming leave application from query parameters
   useEffect(() => {
     const leaveType = searchParams.get("leaveType");
     const from = searchParams.get("from");
@@ -93,8 +92,8 @@ export default function LeavePage() {
 
     if (leaveType && from && to && remaining) {
       const newRequest = {
-        id: `003546AE-${requests.length}`, // Generate unique ID (simplified)
-        name: "Current User", // Replace with actual user name from auth context
+        id: `003546AE-${requests.length}`,
+        name: "Current User",
         type: leaveType,
         from,
         to,
@@ -126,34 +125,42 @@ export default function LeavePage() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold">Leave History</h1>
-          <button
-            onClick={() => router.push("/leave-tracking/apply-leave")}
-            className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-blue-700 transition"
-          >
-            + Apply Leave
-          </button>
-        </div>
-        <LeaveTable
-          rows={filteredRequests.map((req, index) => ({
-            ...req,
-            id: req.id + index, // Ensure unique IDs for table rendering
-          }))}
-          onApprove={handleApprove}
-          onReject={handleReject}
-        />
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={() => router.back()}
-            className="bg-white border rounded px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-          >
-            Cancel
-          </button>
-        </div>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Leave History</h1>
+        <button
+          onClick={() => router.push("/leave-tracking/apply-leave")}
+          className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-blue-700 transition"
+        >
+          + Apply Leave
+        </button>
       </div>
+      <LeaveTable
+        rows={filteredRequests.map((req, index) => ({
+          ...req,
+          id: req.id + index,
+        }))}
+        onApprove={handleApprove}
+        onReject={handleReject}
+      />
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={() => router.back()}
+          className="bg-white border rounded px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function LeaveTrackingPage() {
+  return (
+    <DashboardLayout>
+      <Suspense fallback={<div>Loading leave tracking...</div>}>
+        <LeaveTrackingContent />
+      </Suspense>
     </DashboardLayout>
   );
 }
