@@ -74,7 +74,7 @@ export default function AttendancePage() {
   };
   return (
     <DashboardLayout>
-      <header className="bg-white p-2 flex justify-between items-center mb-3 ">
+      <header className="bg-white p-4 flex justify-between items-center mb-3 ">
         <h1
           className="text-gray-800"
           style={{
@@ -106,7 +106,7 @@ export default function AttendancePage() {
       {/* Summary Section */}
       <section className="bg-white p-2  mb-3">
         <div className="flex justify-between gap-6 ">
-          <div>
+          <div className="p-2]">
             <h2
               className="text-gray-700"
               style={{
