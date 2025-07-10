@@ -44,7 +44,7 @@ export default function ReporteePage() {
     <DashboardLayout>
       <div className="p-6 space-y-4">
         {/* Title */}
-        <h1 className="text-[20px] font-medium leading-[30px] font-outfit text-gray-900 border-b border-gray-200 pb-2">
+        <h1 className="text-[20px] font-medium leading-[30px] font-outfit text-gray-900  border-gray-200 pb-2">
           Reportee
         </h1>
 
