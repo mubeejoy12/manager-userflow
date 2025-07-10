@@ -13,7 +13,7 @@ export default function ReporteeTable({ rows, onEdit }) {
     { field: "joined", headerName: "Joined", flex: 1 },
     {
       field: "edit",
-      headerName: "", 
+      headerName: "",
       sortable: false,
       width: 60,
       renderCell: (params) => (
@@ -39,6 +39,7 @@ export default function ReporteeTable({ rows, onEdit }) {
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: "#F3F4F6",
             fontWeight: 600,
+            borderTop: "none", // ✅ merged here
           },
           "& .MuiDataGrid-cell": {
             borderBottom: "1px solid #E5E7EB",
