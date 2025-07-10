@@ -154,10 +154,10 @@ export default function AttendanceTable() {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <div className="relative w-[331px]">
+        <div className="relative w-[328px]">
           <SearchIcon
             className="absolute  top-1/2 transform -translate-y-1/2 text-gray-400"
-            style={{ fontSize: "30px" }}
+            style={{ fontSize: "28px" }}
           />
           <input
             type="text"
@@ -168,7 +168,7 @@ export default function AttendanceTable() {
           />
         </div>
         <div className="flex items-center gap-3">
-          <select
+          {/* <select
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
             className="border border-gray-300 rounded-[12px] px-2 py-4 w-full h-[56px]"
@@ -180,10 +180,13 @@ export default function AttendanceTable() {
             <option>Specialist Department</option>
             <option>HR Department</option>
             <option>IT Department</option>
-          </select>
-          <button className="border border-gray-300 rounded-[12px]  py-4 w-[80%] h-[56px]">
+          </select> */}
+          <button className="flex items-center justify-center gap-1 border border-gray-300 rounded-[12px] px-4 py-2 w-[90%] h-[40px] text-sm text-gray-700">
             Export CSV
-            <GetAppIcon className="ml-2" style={{ fontSize: "16px" }} />
+            <GetAppIcon
+              className="text-gray-500"
+              style={{ fontSize: "16px" }}
+            />
           </button>
         </div>
       </div>
