@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 // import { Dashboard } from "@mui/icons-material";
 import DashboardLayout from "../components/DashboardLayout";
+import { useSearchParams } from "next/navigation";
 
 const ratings = [
   { label: "10/10", value: 10 },
@@ -112,6 +113,9 @@ export default function AppraisalPage() {
   const [file, setFile] = useState(null);
   const router = useRouter();
   const [appraisals, setAppraisals] = useState([]);
+  const searchParams = useSearchParams();
+  const employeeId = searchParams.get("employeeId");
+  const employeeName = searchParams.get("name");
 
   const handleAddKpi = () => {
     if (newKpi.trim()) {
@@ -143,28 +147,29 @@ export default function AppraisalPage() {
       lineManagerComments,
       fileName: file ? file.name : null,
     };
-  
+
     try {
       // Safely retrieve existing data
       const existingDataRaw = localStorage.getItem("appraisalDataList");
       const existingData = Array.isArray(JSON.parse(existingDataRaw))
         ? JSON.parse(existingDataRaw)
         : [];
-  
+
       // Save updated data
       const updatedData = [...existingData, ...appraisals];
       localStorage.setItem("appraisalDataList", JSON.stringify(updatedData));
-  
+
       // Navigate to the board page
       router.push("/appraisal/appraisal-board");
     } catch (error) {
       console.error("Failed to submit appraisal:", error);
     }
   };
- 
 
   const handleAddNew = () => {
     const entry = {
+      employeeId,
+      employeeName,
       objective,
       kpis,
       employeeRating,
@@ -173,7 +178,19 @@ export default function AppraisalPage() {
       lineManagerComments,
       fileName: file ? file.name : null,
     };
-    setAppraisals((prev) => [...prev, entry]);
+
+    try {
+      const existingDataRaw = localStorage.getItem("appraisalDataList");
+      const existingData = Array.isArray(JSON.parse(existingDataRaw))
+        ? JSON.parse(existingDataRaw)
+        : [];
+
+      const updatedData = [...existingData, entry];
+      localStorage.setItem("appraisalDataList", JSON.stringify(updatedData));
+      alert("Appraisal added successfully!");
+    } catch (error) {
+      console.error("Failed to add appraisal:", error);
+    }
 
     // Clear form
     setObjective("");
@@ -346,4 +363,3 @@ export default function AppraisalPage() {
     </DashboardLayout>
   );
 }
-
