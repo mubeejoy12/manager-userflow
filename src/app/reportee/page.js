@@ -5,6 +5,8 @@ import DashboardLayout from "../components/DashboardLayout";
 import ReporteeTable from "../components/ReporteeTable";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useRouter } from "next/navigation";
+
 
 export default function ReporteePage() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -18,6 +20,16 @@ export default function ReporteePage() {
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setSelectedRow(null);
+  };
+  const router = useRouter();
+
+  const handleMenuClick = (type) => {
+    if (selectedRow) {
+      router.push(
+        `/${type}?employeeId=${selectedRow.id}&name=${selectedRow.name}`
+      );
+    }
+    handleCloseMenu();
   };
 
   const open = Boolean(anchorEl);
@@ -116,9 +128,15 @@ export default function ReporteePage() {
             },
           }}
         >
-          <MenuItem onClick={handleCloseMenu}>View Leave</MenuItem>
-          <MenuItem onClick={handleCloseMenu}>View Appraisal</MenuItem>
-          <MenuItem onClick={handleCloseMenu}>View Query</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("leave-tracking")}>
+            View Leave
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuClick("appraisal")}>
+            View Appraisal
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuClick("query")}>
+            View Query
+          </MenuItem>
         </Menu>
       </div>
     </DashboardLayout>
