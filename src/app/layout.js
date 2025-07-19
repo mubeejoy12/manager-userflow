@@ -1,4 +1,3 @@
-import Image from "next/image";
 import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 // app/components/DashboardLayout.tsx
@@ -26,11 +25,12 @@ const outfit = Outfit({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={outfit.variable}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <ClientLayout>
-          <div >
-       
+          <div>
             {/* Add dashboard-specific styles */}
             {children}
           </div>
