@@ -3,6 +3,7 @@ import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 // app/components/DashboardLayout.tsx
 import ClientLayout from "./ClientLayout";
+import { Outfit } from "next/font/google";
 // import { useState } from "react";
 
 export const metadata = {
