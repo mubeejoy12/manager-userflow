@@ -18,6 +18,11 @@ export const metadata = {
   title: "Sinkronis",
   description: "Signup to get started",
 };
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // Customize as needed
+  variable: "--font-outfit",
+});
 
 export default function RootLayout({ children }) {
   return (
