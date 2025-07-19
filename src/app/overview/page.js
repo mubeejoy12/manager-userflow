@@ -1,7 +1,21 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import DashboardLayout from "../components/DashboardLayout";
 
 export default function OverviewPage() {
+  const [showID, setShowID] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      router.push("/login");
+    }
+  }, []);
+
+  const toggleID = () => setShowID((prev) => !prev);
   // 👉 Work Details Data
   const workDetails = [
     { label: "Department", value: "HR Department" },
@@ -131,12 +145,19 @@ export default function OverviewPage() {
               Confirmed
             </button>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 mt-2">
             <span className="text-sm text-gray-600 font-medium">
-              Employee ID: <span className="font-semibold">EMP-4721XA</span>
+              Employee ID:{" "}
+              <span className="font-semibold">
+                {showID ? "EMP-4721XA" : "**********"}
+              </span>
             </span>
-            <button className="text-sm text-gray-500 border border-gray-300 rounded-md px-3 py-1 hover:bg-gray-100 transition">
-              Hide
+
+            <button
+              onClick={toggleID}
+              className="text-sm text-gray-500 border border-gray-300 rounded-md px-3 py-1 hover:bg-gray-100 transition"
+            >
+              {showID ? "Hide" : "Show"}
             </button>
           </div>
         </div>
