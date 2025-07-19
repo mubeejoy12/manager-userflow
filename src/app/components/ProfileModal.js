@@ -19,7 +19,7 @@ export default function ProfileModal({ isOpen, onClose, user }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 p-4 bg-black/10 flex justify-center items-start sm:justify-end sm:items-start"
+      className="fixed inset-0 z-50 p-2 bg-black/10 flex justify-center items-start sm:justify-end sm:items-start"
       onClick={() => {
         console.log("Background clicked, closing modal");
         onClose();
@@ -42,7 +42,8 @@ export default function ProfileModal({ isOpen, onClose, user }) {
         {/* User Info */}
         <div className="flex items-center gap-3 mb-4">
           <Image
-            src="/nav-img.avif"
+            // src="/nav-img.avif"
+            src="/Vector.png"
             alt={`${name}'s profile`}
             className="w-16 h-16 rounded-full object-cover"
             width={64}
@@ -59,10 +60,9 @@ export default function ProfileModal({ isOpen, onClose, user }) {
         {/* Menu Options */}
         <nav className="space-y-4 text-sm text-gray-700">
           {[
-            { label: "View profile", href: "/settings/profile" },
-            { label: "Company settings", href: "/settings/company-settings" },
-            { label: "Plan", href: "/settings/plan" },
-            { label: "Wallet", href: "/settings/wallet" },
+            { label: "View profile", href: "/overview" },
+
+            { label: "Settings", href: "/settings/plan" },
           ].map(({ label, href }) => (
             <p
               key={label}
@@ -82,7 +82,10 @@ export default function ProfileModal({ isOpen, onClose, user }) {
         {/* Sign in with another account */}
         <div
           className="flex items-center gap-2 text-blue-600 cursor-pointer hover:underline"
-          onClick={() => console.log("Sign in with different account clicked")}
+          onClick={() => {
+            localStorage.removeItem("user");
+            router.push("/login");
+          }}
         >
           <FaPlusCircle />
           <p>Sign in with a different account</p>
