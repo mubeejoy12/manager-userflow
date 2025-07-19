@@ -11,8 +11,8 @@ function LeaveTrackingContent() {
   const [search, setSearch] = useState("");
   const [requests, setRequests] = useState([
     {
-      id: "003546AE",
-      name: "Chloe Davis",
+      id: "E005946",
+      name: "Lauren Carter",
       type: "Sick Leave",
       from: "03.05.2025",
       to: "04.05.2025",
@@ -20,68 +20,33 @@ function LeaveTrackingContent() {
       status: "Pending",
     },
     {
-      id: "003546AE",
-      name: "Michael Young",
-      type: "Sick Leave",
+      id: "E005947",
+      name: "William King",
+      type: "Annual Leave",
       from: "05.05.2025",
       to: "10.05.2025",
       remaining: 5,
-      status: "Pending",
-    },
-    {
-      id: "003546AE",
-      name: "Sophie Adams",
-      type: "Maternity Leave",
-      from: "04.05.2025",
-      to: "06.05.2025",
-      remaining: 2,
-      status: "Pending",
-    },
-    {
-      id: "003546AE",
-      name: "Emily Johnson",
-      type: "Sick Leave",
-      from: "05.05.2025",
-      to: "10.05.2025",
-      remaining: 5,
-      status: "Rejected",
-    },
-    {
-      id: "003546AE",
-      name: "Sophie Adams",
-      type: "Maternity Leave",
-      from: "04.05.2025",
-      to: "06.05.2025",
-      remaining: 2,
-      status: "Pending",
-    },
-    {
-      id: "003546AE",
-      name: "Emily Johnson",
-      type: "Sick Leave",
-      from: "05.05.2025",
-      to: "10.05.2025",
-      remaining: 5,
-      status: "Rejected",
-    },
-    {
-      id: "003546AE",
-      name: "Aidan Robinson",
-      type: "Sick Leave",
-      from: "08.05.2025",
-      to: "09.05.2025",
-      remaining: 1,
       status: "Approved",
     },
     {
-      id: "003546AE",
-      name: "Michael Young",
+      id: "E005947",
+      name: "William King",
       type: "Sick Leave",
-      from: "05.05.2025",
-      to: "10.05.2025",
-      remaining: 5,
+      from: "12.05.2025",
+      to: "13.05.2025",
+      remaining: 2,
       status: "Pending",
     },
+    {
+      id: "E005946",
+      name: "Lauren Carter",
+      type: "Annual Leave",
+      from: "15.05.2025",
+      to: "20.05.2025",
+      remaining: 5,
+      status: "Approved",
+    },
+    // Add more entries as needed
   ]);
 
   useEffect(() => {
@@ -104,9 +69,14 @@ function LeaveTrackingContent() {
     }
   }, [searchParams]);
 
-  const filteredRequests = requests.filter((req) =>
-    req.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const employeeId = searchParams.get("employeeId");
+  const employeeName = searchParams.get("name");
+
+  const filteredRequests = employeeId
+    ? requests.filter((req) => req.id === employeeId)
+    : requests.filter((req) =>
+        req.name.toLowerCase().includes(search.toLowerCase())
+      );
 
   const handleApprove = (id) => {
     setRequests(
@@ -127,7 +97,9 @@ function LeaveTrackingContent() {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Leave History</h1>
+        <h1 className="text-2xl font-bold">
+          Leave History {employeeName ? `for ${employeeName}` : ""}
+        </h1>
         <button
           onClick={() => router.push("/leave-tracking/apply-leave")}
           className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-blue-700 transition"
