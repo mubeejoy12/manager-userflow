@@ -1,5 +1,6 @@
 import Image from "next/image";
 import "./globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
 // app/components/DashboardLayout.tsx
 import ClientLayout from "./ClientLayout";
 // import { useState } from "react";
