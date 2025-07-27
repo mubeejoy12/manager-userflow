@@ -11,7 +11,6 @@ export default function LeaveTable({ rows, onApprove, onReject }) {
   const handleRowClick = (params) => {
     const encodedName = encodeURIComponent(params.row.name);
     router.push(`/leave-tracking/${encodeURIComponent(params.row.name)}`);
-
   };
   const columns = [
     { field: "id", headerName: "Employee ID", flex: 1 },
@@ -61,15 +60,42 @@ export default function LeaveTable({ rows, onApprove, onReject }) {
         sx={{
           fontFamily: "Outfit",
           fontSize: 14,
+          "& .even": { backgroundColor: "#F9FAFB" },
+          "& .odd": { backgroundColor: "white" },
+
+          // 🚫 Kill ALL outer borders
+          border: "none",
+
+          // 🚫 Remove column header underline + background
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#F3F4F6",
-            fontWeight: 600,
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "1px solid #E5E7EB",
-          },
-          "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#F9FAFB",
+            borderBottom: "none",
+          },
+
+          // 🚫 Hide vertical column lines
+          "& .MuiDataGrid-columnSeparator": {
+            visibility: "hidden",
+          },
+
+          // 🚫 Remove cell borders
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+
+          // 🚫 Remove footer border
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+          },
+
+          // 🚫 Remove row borders
+          "& .MuiDataGrid-row": {
+            border: "none",
+          },
+
+          // ✨ Optional: Soft hover effect
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "#F3F4F6",
+            outline: "none",
           },
         }}
       />
