@@ -35,17 +35,43 @@ export default function ReporteeTable({ rows, onEdit }) {
         disableSelectionOnClick
         sx={{
           fontFamily: "Outfit",
-          fontSize: "14px",
+          fontSize: 14,
+          "& .even": { backgroundColor: "#F9FAFB" },
+          "& .odd": { backgroundColor: "white" },
+
+          // 🚫 Kill ALL outer borders
+          border: "none",
+
+          // 🚫 Remove column header underline + background
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#F3F4F6",
-            fontWeight: 600,
-            borderTop: "none", // ✅ merged here
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "1px solid #E5E7EB",
-          },
-          "& .MuiDataGrid-row:nth-of-type(even)": {
             backgroundColor: "#F9FAFB",
+            borderBottom: "none",
+          },
+
+          // 🚫 Hide vertical column lines
+          "& .MuiDataGrid-columnSeparator": {
+            visibility: "hidden",
+          },
+
+          // 🚫 Remove cell borders
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+
+          // 🚫 Remove footer border
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+          },
+
+          // 🚫 Remove row borders
+          "& .MuiDataGrid-row": {
+            border: "none",
+          },
+
+          // ✨ Optional: Soft hover effect
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "#F3F4F6",
+            outline: "none",
           },
         }}
       />
