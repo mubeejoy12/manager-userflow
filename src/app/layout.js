@@ -1,9 +1,11 @@
+// import "./globals.css";
+import ClientShell from "./ClientShell";
 import "./globals.css";
-import { Geist, Geist_Mono } from "next/font/google";
-// app/components/DashboardLayout.tsx
-import ClientLayout from "./ClientLayout";
-import { Outfit } from "next/font/google";
-// import { useState } from "react";
+import { Geist, Geist_Mono, Outfit } from "next/font/google";
+// import ClientLayout from "./ClientLayout";
+// import { AuthProvider } from "./context/AuthContext";
+// import { AlertProvider } from "./context/AlertContext";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -13,15 +15,17 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-outfit",
+});
+
 export const metadata = {
   title: "Sinkronis",
   description: "Signup to get started",
 };
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], // Customize as needed
-  variable: "--font-outfit",
-});
 
 export default function RootLayout({ children }) {
   return (
@@ -29,12 +33,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClientLayout>
-          <div>
-            {/* Add dashboard-specific styles */}
-            {children}
-          </div>
-        </ClientLayout>
+        <ClientShell>{children}</ClientShell>
       </body>
     </html>
   );
