@@ -84,7 +84,7 @@ export default function ProfileModal({ isOpen, onClose, user }) {
           className="flex items-center gap-2 text-blue-600 cursor-pointer hover:underline"
           onClick={() => {
             localStorage.removeItem("user");
-            router.push("/login");
+            router.push("/auth/login");
           }}
         >
           <FaPlusCircle />
