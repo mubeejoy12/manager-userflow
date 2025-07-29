@@ -3,17 +3,25 @@
 import { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import DashboardLayout from "./DashboardLayout";
+import { useRouter } from "next/navigation";
 
 export default function AppraisalBoard() {
   const [data, setData] = useState([]);
   const [filteredObjective, setFilteredObjective] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedQuarter, setSelectedQuarter] = useState("All");
+
+  const handleQuarterFilter = (quarter) => {
+    setSelectedQuarter(quarter);
+  };
 
   useEffect(() => {
     const urlData = new URLSearchParams(window.location.search).get("data");
     if (urlData) {
       try {
         const parsedData = JSON.parse(decodeURIComponent(urlData));
+        // Add a date to the parsed data for filtering purposes
+        parsedData.date = new Date().toISOString(); 
         const storedData =
           JSON.parse(localStorage.getItem("appraisalDataList")) || [];
         const updatedData = [...storedData, parsedData];
@@ -26,6 +34,48 @@ export default function AppraisalBoard() {
       const saved = localStorage.getItem("appraisalDataList");
       if (saved) {
         setData(JSON.parse(saved));
+      } else {
+        // Mock data with dates for demonstration
+        const mockData = [
+          {
+            objective: "Customer Service/Compliance with Road Safety",
+            kpis: ["Achieve 95% customer satisfaction rating", "Maintain a zero-accident record"],
+            employeeRating: 9,
+            employeeComments: "Exceeded expectations in customer service.",
+            lineManagerGrade: 8,
+            lineManagerComments: "Good performance, but can improve in punctuality.",
+            date: "2024-01-15T10:00:00Z", // Q1
+          },
+          {
+            objective: "Administrative Functions",
+            kpis: ["Submit all reports on time", "Organize team meetings effectively"],
+            employeeRating: 8,
+            employeeComments: "All reports were submitted ahead of schedule.",
+            lineManagerGrade: 8,
+            lineManagerComments: "Well-organized and efficient.",
+            date: "2024-02-20T10:00:00Z", // Q1
+          },
+          {
+            objective: "Vehicle Maintenance",
+            kpis: ["Ensure all vehicles are serviced regularly", "Maintain vehicle logs"],
+            employeeRating: 7,
+            employeeComments: "Vehicles are well-maintained.",
+            lineManagerGrade: 7,
+            lineManagerComments: "Consistent effort in vehicle maintenance.",
+            date: "2024-05-10T10:00:00Z", // Q2
+          },
+          {
+            objective: "Customer Service/Compliance with Road Safety",
+            kpis: ["Handle customer complaints efficiently", "Ensure road safety compliance"],
+            employeeRating: 8,
+            employeeComments: "Handled all complaints professionally.",
+            lineManagerGrade: 9,
+            lineManagerComments: "Excellent customer service.",
+            date: "2024-07-01T10:00:00Z", // Q3
+          },
+        ];
+        localStorage.setItem("appraisalDataList", JSON.stringify(mockData));
+        setData(mockData);
       }
     }
   }, []);
@@ -37,11 +87,21 @@ export default function AppraisalBoard() {
   ];
 
   // Group KPI by objective
+  const getQuarter = (dateString) => {
+    const date = new Date(dateString);
+    const month = date.getMonth(); // 0-indexed
+    if (month >= 0 && month <= 2) return "Q1";
+    if (month >= 3 && month <= 5) return "Q2";
+    if (month >= 6 && month <= 8) return "Q3";
+    return "";
+  };
+
   const rows = data
     ? data
         .filter(
           (item) =>
-            filteredObjective === "All" || item.objective === filteredObjective
+            (filteredObjective === "All" || item.objective === filteredObjective) &&
+            (selectedQuarter === "All" || getQuarter(item.date) === selectedQuarter)
         )
         .map((entry, index) => ({
             id: index + 1,
@@ -135,23 +195,19 @@ export default function AppraisalBoard() {
   return (
     <DashboardLayout>
       <div className="p-6 w-full max-w-full overflow-x-hidden">
-        <h1 className="mb-6 text-3xl font-semibold font-outfit">Appraisal</h1>
+                <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-semibold font-outfit">Appraisal</h1>
+          <button
+            onClick={() => router.push("/appraisal/form")}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            New Appraisal
+          </button>
+        </div>
 
         <div className="mb-4">
-          <h2 className="text-lg font-medium mb-2">Board</h2>
+          {/* <h2 className="text-lg font-medium mb-2">Board</h2> */}
           <div className="flex flex-wrap justify-end items-center gap-2">
-            <select
-              value={filteredObjective}
-              onChange={(e) => setFilteredObjective(e.target.value)}
-              className="border p-2 rounded w-40"
-            >
-              <option value="All">Members</option>
-              {objectives.map((obj) => (
-                <option key={obj} value={obj}>
-                  {obj}
-                </option>
-              ))}
-            </select>
             <input
               type="text"
               placeholder="Filter members"
@@ -159,18 +215,40 @@ export default function AppraisalBoard() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border p-2 rounded w-64"
             />
-            <button
-              onClick={() => {
-                setFilteredObjective("All");
-                setSearchTerm("");
-                localStorage.removeItem("appraisalDataList");
-                setData([]);
-              }}
-              className="bg-red-500 text-white px-4 py-2 rounded"
+            <select
+              // value={statusFilter}
+              // onChange={(e) => setStatusFilter(e.target.value)}
+              className="border p-2 rounded w-40"
             >
-              Clean
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="in-review">In-Review</option>
+              <option value="completed">Completed</option>
+            </select>
+            <button
+              onClick={() => handleQuarterFilter('Q1')}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Q1
             </button>
-
+            <button
+              onClick={() => handleQuarterFilter('Q2')}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Q2
+            </button>
+            <button
+              onClick={() => handleQuarterFilter('Q3')}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Q3
+            </button>
+            <button
+              onClick={() => handleQuarterFilter('All')}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              All
+            </button>
             <button
               onClick={() => console.log("Search clicked")}
               className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -203,6 +281,14 @@ export default function AppraisalBoard() {
               },
             }}
           />
+        </div>
+        <div className="mt-6">
+          <h3 className="text-lg font-medium mb-2">Line Manager Feedback</h3>
+          <textarea
+            className="w-full p-2 border rounded"
+            rows="2"
+            placeholder="Enter your feedback here..."
+          ></textarea>
         </div>
       </div>
     </DashboardLayout>
