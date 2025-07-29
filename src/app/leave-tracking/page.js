@@ -9,8 +9,9 @@ function LeaveTrackingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
-  const [requests, setRequests] = useState([
+  const [leaveRequests, setLeaveRequests] = useState([
     {
+      requestId: "REQ001",
       id: "E005946",
       name: "Lauren Carter",
       type: "Sick Leave",
@@ -20,6 +21,27 @@ function LeaveTrackingContent() {
       status: "Pending",
     },
     {
+      requestId: "REQ002",
+      id: "E005946",
+      name: "Lauren Carter",
+      type: "Annual Leave",
+      from: "10.04.2025",
+      to: "15.04.2025",
+      remaining: 5,
+      status: "Approved",
+    },
+    {
+      requestId: "REQ003",
+      id: "E005946",
+      name: "Lauren Carter",
+      type: "Casual Leave",
+      from: "20.06.2025",
+      to: "22.06.2025",
+      remaining: 3,
+      status: "Rejected",
+    },
+    {
+      requestId: "REQ004",
       id: "E005947",
       name: "William King",
       type: "Annual Leave",
@@ -28,26 +50,8 @@ function LeaveTrackingContent() {
       remaining: 5,
       status: "Approved",
     },
-    {
-      id: "E005947",
-      name: "William King",
-      type: "Sick Leave",
-      from: "12.05.2025",
-      to: "13.05.2025",
-      remaining: 2,
-      status: "Pending",
-    },
-    {
-      id: "E005946",
-      name: "Lauren Carter",
-      type: "Annual Leave",
-      from: "15.05.2025",
-      to: "20.05.2025",
-      remaining: 5,
-      status: "Approved",
-    },
-    // Add more entries as needed
   ]);
+  
 
   useEffect(() => {
     const leaveType = searchParams.get("leaveType");
@@ -57,7 +61,7 @@ function LeaveTrackingContent() {
 
     if (leaveType && from && to && remaining) {
       const newRequest = {
-        id: `003546AE-${requests.length}`,
+        id: `003546AE-${leaveRequests.length}`,
         name: "Current User",
         type: leaveType,
         from,
@@ -65,34 +69,37 @@ function LeaveTrackingContent() {
         remaining: parseInt(remaining),
         status: "Pending",
       };
-      setRequests((prev) => [...prev, newRequest]);
+      setLeaveRequests((prev) => [...prev, newRequest]);
     }
-  }, [searchParams]);
+  }, [searchParams, leaveRequests]);
 
   const employeeId = searchParams.get("employeeId");
   const employeeName = searchParams.get("name");
 
   const filteredRequests = employeeId
-    ? requests.filter((req) => req.id === employeeId)
-    : requests.filter((req) =>
+    ? (leaveRequests || []).filter((req) => req.id === employeeId)
+    : (leaveRequests || []).filter((req) =>
         req.name.toLowerCase().includes(search.toLowerCase())
       );
 
-  const handleApprove = (id) => {
-    setRequests(
-      requests.map((req) =>
-        req.id === id ? { ...req, status: "Approved" } : req
-      )
-    );
-  };
-
-  const handleReject = (id) => {
-    setRequests(
-      requests.map((req) =>
-        req.id === id ? { ...req, status: "Rejected" } : req
-      )
-    );
-  };
+      const handleApprove = (requestId) => {
+        if (!isMountedRef.current) return;
+        setLeaveRequests((prev) =>
+          prev.map((req) =>
+            req.requestId === requestId ? { ...req, status: "Approved" } : req
+          )
+        );
+      };
+      
+      const handleReject = (requestId) => {
+        if (!isMountedRef.current) return;
+        setLeaveRequests((prev) =>
+          prev.map((req) =>
+            req.requestId === requestId ? { ...req, status: "Rejected" } : req
+          )
+        );
+      };
+      
 
   return (
     <div className="p-6">
