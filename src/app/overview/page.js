@@ -143,12 +143,15 @@ export default function OverviewPage() {
                 Confirmed
               </button>
             </div>
-            <button
-              onClick={toggleWorkDetails}
-              className="text-sm text-gray-500 border border-gray-300 rounded-md px-3 py-1 hover:bg-gray-100 transition"
-            >
-              {showWorkDetails ? "Hide" : "Show"}
-            </button>
+            <div className="flex items-center gap-2">
+              {showWorkDetails && <p className="text-sm text-gray-500">Employee ID: 0002345</p>}
+              <button
+                onClick={toggleWorkDetails}
+                className="text-sm text-gray-500 border border-gray-300 rounded-md px-3 py-1 hover:bg-gray-100 transition"
+              >
+                {showWorkDetails ? "Hide" : "Show"}
+              </button>
+            </div>
           </div>
 
           {showWorkDetails && (
