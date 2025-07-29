@@ -210,17 +210,24 @@ export default function AppraisalForm() {
         }}
       >
         <div className="w-[781px]">
-          <h1
-            className="mb-6"
-            style={{
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 600,
-              fontSize: "38px",
-              lineHeight: "57px",
-            }}
-          >
-            Appraisal
-          </h1>
+          <div className="flex justify-between items-center mb-6">
+            <h1
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 600,
+                fontSize: "38px",
+                lineHeight: "57px",
+              }}
+            >
+              Appraisal
+            </h1>
+            <button
+              onClick={() => router.push("/appraisal/appraisal-board")}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              View Board
+            </button>
+          </div>
 
           <div className="space-y-6">
             {/* Objective */}
@@ -230,7 +237,7 @@ export default function AppraisalForm() {
                 type="text"
                 value={objective}
                 onChange={(e) => setObjective(e.target.value)}
-                placeholder="Enter your performance objective"
+                placeholder=" "
                 className="w-full p-3 border rounded-md"
               />
             </div>
@@ -350,7 +357,7 @@ export default function AppraisalForm() {
                 className="bg-blue-500 text-white px-6 py-2 rounded"
                 onClick={handleSubmit}
               >
-                Create Appraisal
+                Submit Appraisal
               </button>
             </div>
           </div>
