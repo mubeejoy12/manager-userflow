@@ -1,10 +1,47 @@
-"use client";
-
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
+import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function ReporteeTable({ rows, onEdit }) {
+  const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleMenuClick = (event, row) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedRow(row);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedRow(null);
+  };
+
+  const handleViewLeave = () => {
+    if (selectedRow) {
+      router.push(`/reportee/leave?id=${selectedRow.id}`);
+    }
+    handleMenuClose();
+  };
+
+  const handleViewAppraisal = () => {
+    if (selectedRow) {
+      router.push(`/reportee/appraisal?id=${selectedRow.id}`);
+    }
+    handleMenuClose();
+  };
+
+  const handleViewQuery = () => {
+    if (selectedRow) {
+      router.push(`/reportee/query?id=${selectedRow.id}`);
+    }
+    handleMenuClose();
+  };
+
   const columns = [
     { field: "id", headerName: "Employee ID", flex: 1 },
     { field: "name", headerName: "Name", flex: 1 },
@@ -17,7 +54,7 @@ export default function ReporteeTable({ rows, onEdit }) {
       sortable: false,
       width: 60,
       renderCell: (params) => (
-        <IconButton onClick={(event) => onEdit(event, params.row)}>
+        <IconButton onClick={(event) => handleMenuClick(event, params.row)}>
           <EditIcon className="text-gray-500 hover:text-blue-600" />
         </IconButton>
       ),
@@ -75,6 +112,15 @@ export default function ReporteeTable({ rows, onEdit }) {
           },
         }}
       />
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleViewLeave}>View Leave</MenuItem>
+        <MenuItem onClick={handleViewAppraisal}>View Appraisal</MenuItem>
+        <MenuItem onClick={handleViewQuery}>View Query</MenuItem>
+      </Menu>
     </div>
   );
 }
