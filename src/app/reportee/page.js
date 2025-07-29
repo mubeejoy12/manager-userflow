@@ -7,7 +7,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 
-
 export default function ReporteePage() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -23,13 +22,29 @@ export default function ReporteePage() {
   };
   const router = useRouter();
 
-  const handleMenuClick = (type) => {
-    if (selectedRow) {
-      router.push(
-        `/${type}?employeeId=${selectedRow.id}&name=${selectedRow.name}`
-      );
+  const handleMenuClick = (type, employee) => {
+    const employeeId = employee.id;
+    const employeeName = employee.name;
+    const role = "manager"; // or "employee"
+    
+
+    let path = "";
+
+    switch (type) {
+      case "leave":
+        path = `/reportee/leave?employeeId=${employeeId}&name=${employeeName}`;
+        break;
+      case "appraisal":
+        path = `/appraisal?employeeId=${employeeId}&name=${employeeName}&role=${role}&mode=view`;
+        break;
+      case "query":
+        path = `/query?employeeId=${employeeId}&name=${employeeName}`;
+        break;
+      default:
+        path = "/";
     }
-    handleCloseMenu();
+
+    router.push(path);
   };
 
   const open = Boolean(anchorEl);
@@ -128,7 +143,7 @@ export default function ReporteePage() {
             },
           }}
         >
-          <MenuItem onClick={() => handleMenuClick("leave-tracking")}>
+          <MenuItem onClick={() => handleMenuClick("leave", selectedRow)}>
             View Leave
           </MenuItem>
           <MenuItem onClick={() => handleMenuClick("appraisal")}>
