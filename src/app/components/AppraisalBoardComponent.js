@@ -20,7 +20,10 @@ export default function AppraisalBoardComponent() {
     const mockData = [
       {
         objective: "Customer Service/Compliance with Road Safety",
-        kpis: ["Achieve 95% customer satisfaction rating", "Maintain a zero-accident record"],
+        kpis: [
+          "Achieve 95% customer satisfaction rating",
+          "Maintain a zero-accident record",
+        ],
         employeeRating: 9,
         employeeComments: "Exceeded expectations in customer service.",
         lineManagerGrade: null,
@@ -29,7 +32,10 @@ export default function AppraisalBoardComponent() {
       },
       {
         objective: "Administrative Functions",
-        kpis: ["Submit all reports on time", "Organize team meetings effectively"],
+        kpis: [
+          "Submit all reports on time",
+          "Organize team meetings effectively",
+        ],
         employeeRating: 8,
         employeeComments: "All reports were submitted ahead of schedule.",
         lineManagerGrade: null,
@@ -43,7 +49,11 @@ export default function AppraisalBoardComponent() {
   }, [userId]);
 
   const handleRowClick = (params) => {
-    router.push(`/reportee/appraisal/form?id=${userId}&appraisal=${JSON.stringify(params.row)}`);
+    router.push(
+      `/reportee/appraisal/form?id=${userId}&appraisal=${JSON.stringify(
+        params.row
+      )}`
+    );
   };
 
   const objectives = [
@@ -60,18 +70,17 @@ export default function AppraisalBoardComponent() {
             filteredObjective === "All" || item.objective === filteredObjective
         )
         .map((entry, index) => ({
-            id: index + 1,
-            objective: entry.objective,
-            kpis: entry.kpis, // keep it an array
-            employeeRating: entry.employeeRating,
-            employeeComment: entry.employeeComments,
-            lineManagerGrade: entry.lineManagerGrade,
-            lineManagerComment: entry.lineManagerComments,
-            status: entry.status,
-          }))
+          id: index + 1,
+          objective: entry.objective,
+          kpis: entry.kpis, // keep it an array
+          employeeRating: entry.employeeRating,
+          employeeComment: entry.employeeComments,
+          lineManagerGrade: entry.lineManagerGrade,
+          lineManagerComment: entry.lineManagerComments,
+          status: entry.status,
+        }))
         .filter((row) =>
-            row.kpis.join(' ').toLowerCase().includes(searchTerm.toLowerCase())
-
+          row.kpis.join(" ").toLowerCase().includes(searchTerm.toLowerCase())
         )
     : [];
 
@@ -171,15 +180,15 @@ export default function AppraisalBoardComponent() {
   return (
     <DashboardLayout>
       <div className="p-6 w-full max-w-full overflow-x-hidden">
-                <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-semibold font-outfit">Appraisal for {userName}</h1>
-          
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-semibold font-outfit">
+            Appraisal for {userName}
+          </h1>
         </div>
 
         <div className="mb-4">
           {/* <h2 className="text-lg font-medium mb-2">Board</h2> */}
           <div className="flex flex-wrap justify-end items-center gap-2">
-            
             <input
               type="text"
               placeholder="Filter members"
@@ -197,7 +206,6 @@ export default function AppraisalBoardComponent() {
               <option value="in-review">In-Review</option>
               <option value="completed">Completed</option>
             </select>
-            
 
             <button
               onClick={() => console.log("Search clicked")}
@@ -236,14 +244,14 @@ export default function AppraisalBoardComponent() {
             }}
           />
         </div>
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <h3 className="text-lg font-medium mb-2">Line Manager Feedback</h3>
           <textarea
             className="w-full p-2 border rounded"
             rows="2"
             placeholder="Enter your feedback here..."
           ></textarea>
-        </div>
+        </div> */}
       </div>
     </DashboardLayout>
   );
