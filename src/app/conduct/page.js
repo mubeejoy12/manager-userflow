@@ -255,7 +255,7 @@ export default function ConductPage() {
               </div>
             ),
           },
-        ], [tab, handleEditClick]);
+        ], [handleEditClick]);
 
   if (showForm) {
     return (
