@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import {
   Box,
   Tabs,
@@ -88,15 +88,28 @@ export default function ConductPage() {
   const [queryData, setQueryData] = useState([...queryRows]);
   const [suspensionData, setSuspensionData] = useState([...suspensionRows]);
 
-  const handleNewEntry = () => {
-    setShowForm(true);
-  };
+  const isMounted = useRef(false);
 
-  const handleFormSubmit = (newEntry) => {
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const handleNewEntry = useCallback(() => {
+    if (isMounted.current) {
+      setShowForm(true);
+    }
+  }, []);
+
+  const handleFormSubmit = useCallback((newEntry) => {
+    if (!isMounted.current) return;
+
     const newId = tab === 0 ? queryData.length + 1 : suspensionData.length + 1;
     if (tab === 0) {
-      setQueryData([
-        ...queryData,
+      setQueryData((prev) => [
+        ...prev,
         {
           ...newEntry,
           id: newId,
@@ -117,8 +130,8 @@ export default function ConductPage() {
         },
       ]);
     } else {
-      setSuspensionData([
-        ...suspensionData,
+      setSuspensionData((prev) => [
+        ...prev,
         {
           ...newEntry,
           id: newId,
@@ -128,26 +141,32 @@ export default function ConductPage() {
       ]);
     }
     setShowForm(false);
-  };
+  }, [tab, queryData, suspensionData]);
 
-  const handleEditClick = (row) => {
-    setSelectedRow(row);
-    setShowDetails(true);
-  };
+  const handleEditClick = useCallback((row) => {
+    if (isMounted.current) {
+      setSelectedRow(row);
+      setShowDetails(true);
+    }
+  }, []);
 
-  const handleCloseDetails = () => {
-    setShowDetails(false);
-    setSelectedRow(null);
-  };
+  const handleCloseDetails = useCallback(() => {
+    if (isMounted.current) {
+      setShowDetails(false);
+      setSelectedRow(null);
+    }
+  }, []);
 
-  const rows = tab === 0 ? queryData : suspensionData;
-  const filteredRows = rows.filter((row) =>
-    Object.values(row).some((value) =>
-      value.toString().toLowerCase().includes(search.toLowerCase())
-    )
-  );
+  const filteredRows = useMemo(() => {
+    const rows = tab === 0 ? queryData : suspensionData;
+    return rows.filter((row) =>
+      Object.values(row).some((value) =>
+        value.toString().toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [tab, queryData, suspensionData, search]);
 
-  const columns = (mode) =>
+  const columns = React.useMemo(() => (mode) =>
     mode === "Query"
       ? [
           { field: "empId", headerName: "Employee ID", flex: 1 },
@@ -236,7 +255,7 @@ export default function ConductPage() {
               </div>
             ),
           },
-        ];
+        ], [tab, handleEditClick]);
 
   if (showForm) {
     return (
@@ -264,13 +283,13 @@ export default function ConductPage() {
 
           <Box display="flex" gap={1} flexWrap="wrap">
             <Button variant="outlined">Export CSV</Button>
-            <Button
+            {/* <Button
               variant="contained"
               color="primary"
               onClick={handleNewEntry}
             >
               {tab === 0 ? "+ New Query" : "+ New Suspension"}
-            </Button>
+            </Button> */}
           </Box>
         </div>
 
@@ -313,6 +332,7 @@ export default function ConductPage() {
           }}
         >
           <DataGrid
+            key={tab}
             rows={filteredRows}
             columns={columns(tab === 0 ? "Query" : "Suspension")}
             getRowId={(row) => row.id}
